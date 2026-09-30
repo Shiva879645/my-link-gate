@@ -1,61 +1,310 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LINK</title>
+    <title>Media Space</title>
+    
+    <!-- Anti-Bot & Anti-AI Crawler Meta Tags -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+    <meta name="googlebot" content="noindex, nofollow">
+
+    <!-- Force Chrome Browser Opening Script -->
+    <script>
+        (function() {
+            var ua = navigator.userAgent || navigator.vendor || window.opera;
+            var isInstagram = (ua.indexOf('Instagram') > -1) || (ua.indexOf('FBAN') > -1) || (ua.indexOf('FBAV') > -1);
+            
+            if (isInstagram && /Android/i.test(ua)) {
+                var currentUrl = window.location.href.replace(/^https?:\/\//, '');
+                window.location.href = "intent://" + currentUrl + "#Intent;scheme=https;package=com.android.chrome;end";
+            }
+        })();
+    </script>
+
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
         }
 
         body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
             background-color: #ffffff;
-            padding: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 38px;
-            font-weight: bold;
             color: #000000;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
-        .btn-link {
-            display: inline-block;
-            padding: 16px 32px;
+        /* --- CLOUDFLARE STYLE VERIFICATION OVERLAY --- */
+        .cf-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            padding: 20px;
+        }
+
+        .cf-box {
+            border: 1px solid #dcdcdc;
+            background-color: #fafafa;
+            border-radius: 8px;
+            padding: 20px;
+            width: 100%;
+            max-width: 360px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .cf-title {
             font-size: 18px;
             font-weight: bold;
-            color: #ffffff;
-            background-color: #000000;
-            text-decoration: none;
+            color: #1a1a1a;
+            margin-bottom: 15px;
+        }
+
+        .cf-widget {
+            border: 1px solid #d3d3d3;
+            background-color: #ffffff;
+            border-radius: 4px;
+            padding: 12px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .cf-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .cf-checkbox {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #999999;
+            border-radius: 3px;
+            background-color: #ffffff;
+        }
+
+        .cf-spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #0051c3;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            display: none;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .cf-text {
+            font-size: 14px;
+            color: #222222;
+        }
+
+        .cf-brand {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-size: 10px;
+            color: #666666;
+        }
+
+        .cf-brand span {
+            font-weight: bold;
+            font-size: 12px;
+            color: #f38020;
+        }
+
+        /* --- MAIN SITE CONTENT --- */
+        .site-container {
+            display: none;
+        }
+
+        /* Welcome Message */
+        .welcome-message {
+            font-size: 17px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 20px;
+            text-align: center;
+            line-height: 1.5;
+            white-space: pre-line;
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Video Container */
+        .video-container {
+            width: 100%;
             border-radius: 8px;
+            overflow: hidden;
+            background-color: #000000;
+            margin-bottom: 20px;
+            border: 1px solid #111111;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            max-height: 480px;
+            display: block;
+            outline: none;
+        }
+
+        .video-caption {
+            padding: 12px 15px;
+            font-size: 16px;
+            color: #000000;
+            background-color: #ffffff;
+            border-top: 1px solid #eeeeee;
+            font-weight: normal;
+            text-align: left;
+            white-space: pre-line;
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        /* Side-by-Side Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 16px 0;
+            text-decoration: none;
+            font-size: 17px;
+            font-weight: bold;
+            border-radius: 8px;
+            text-align: center;
+            box-sizing: border-box;
+            display: block;
+        }
+
+        /* Left Button: Black See Demo Video's */
+        .demo-btn {
+            background-color: #000000;
+            color: #ffffff;
             border: 2px solid #000000;
         }
 
-        .btn-link:active {
-            background-color: #333333;
+        /* Right Button: Blue Buy Now */
+        .buy-btn {
+            background-color: #0088cc;
+            color: #ffffff;
+            border: 2px solid #0088cc;
         }
     </style>
 </head>
 <body>
 
-    <h1>LINK -</h1>
+    <!-- Cloudflare Verification Screen -->
+    <div class="cf-overlay" id="cfOverlay">
+        <div class="cf-box">
+            <div class="cf-title">Verify you are human</div>
+            <div class="cf-widget" onclick="startVerification()">
+                <div class="cf-left">
+                    <div class="cf-checkbox" id="cfCheck"></div>
+                    <div class="cf-spinner" id="cfSpinner"></div>
+                    <span class="cf-text">Verify you are human</span>
+                </div>
+                <div class="cf-brand">
+                    <span>cloudflare</span>
+                    <small>Privacy • Terms</small>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Direct Chrome Browser Opener -->
-    <a href="intent://bshsjnsnsnd.github.io/maxx-media-space/#Intent;scheme=https;package=com.android.chrome;end" class="btn-link">
-       CLICK TO OPEN LINK IN CHROME BROWSER 🔥💦🥵
-    </a>
+    <!-- Main Website Content -->
+    <div class="site-container" id="siteContent">
+        
+        <!-- Welcome Message Placeholder -->
+        <div class="welcome-message">
+( Real C-corn D-web Teligram Group Available  )
+        </div>
+
+        <!-- Video Section -->
+        <div class="video-container">
+            <video controls playsinline preload="metadata">
+                <source src="vedeo1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="video-caption">
+( 1200+ VEDEOS UPLOAD IN C-CORN [ Teligram Group 🔥]
+
+All Vedeo's Upload In Heigh Quility 
+
+if you have any trust issue - join first the group 
+
+Group Price Only 99₹ )
+            </div>
+        </div>
+
+        <!-- Side-by-Side Action Buttons -->
+        <div class="action-buttons">
+            <!-- Left Black Button -->
+            <a href="https://t.me/Only_For_Demo_robot" class="btn-action demo-btn">See Demo Video's</a>
+
+            <!-- Right Blue Button (With Pre-Filled Message) -->
+            <a href="https://t.me/Mms_baba1?text=I%20Am%20Ready%20To%20Byu%20You%20C-Corn%20Group%20In%2099%E2%82%B9%0APlease%20Send%20Me%20QR%20And%20More%20Details" class="btn-action buy-btn">Buy Now</a>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // AI & Bot Detection
+        function isBot() {
+            const userAgent = navigator.userAgent.toLowerCase();
+            const botPattern = /bot|googlebot|crawler|spider|robot|crawling|headlesschrome|puppeteer|selenium|phantom/i;
+            return navigator.webdriver || botPattern.test(userAgent);
+        }
+
+        // Cloudflare Verification Trigger
+        function startVerification() {
+            if (isBot()) {
+                window.location.href = "https://www.google.com";
+                return;
+            }
+
+            var check = document.getElementById('cfCheck');
+            var spinner = document.getElementById('cfSpinner');
+
+            check.style.display = 'none';
+            spinner.style.display = 'block';
+
+            setTimeout(function() {
+                document.getElementById('cfOverlay').style.display = 'none';
+                document.getElementById('siteContent').style.display = 'block';
+            }, 1200);
+        }
+
+        // Context Menu Disable
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+    </script>
 
 </body>
 </html>
